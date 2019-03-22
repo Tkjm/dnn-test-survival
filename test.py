@@ -15,7 +15,7 @@ mainWindow.setMinimumSize(math.floor(
     screensize[0] * 2 / 3), math.floor(screensize[1] * 2 / 3))
 menuBar = QMenuBar(mainWindow)
 menuBar.setMinimumWidth(mainWindow.minimumWidth())
-optionMenu = menuBar.addMenu('option')
+optionMenu = menuBar.addMenu('Option')
 exitButton = optionMenu.addAction('Exit')
 exitButton.setShortcut(Qt.Key_Escape)
 exitButton.setStatusTip('Exit application')
