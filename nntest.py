@@ -38,14 +38,14 @@ for episode in range(200):
         q_table[observation][action] += learning_rate\
             * (reward + discount * future_reward
                - q_table[observation][action])
-        if exploration_rate > 0.0:
-            exploration_rate -= exploration_delta
         observation = new_ob
         if done:
             print("Episode finished after {} timesteps".format(step+1))
             break
     if not done:
         print("Episode timed out after {} timesteps".format(200))
+    if exploration_rate > 0.0:
+        exploration_rate -= exploration_delta
 
 # model = tf.keras.models.Sequential([
 #   tf.keras.layers.Flatten(input_shape=(8, 8)),
