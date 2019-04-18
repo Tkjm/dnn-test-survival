@@ -1,26 +1,22 @@
 from environment import Environment
+from q_agent import QAgent
 import numpy as np
 
 
-class QTableAgent():
+class QTableAgent(QAgent):
     def __init__(self, env: Environment, episodes: int) -> None:
-        self.q_table = np.zeros((env.observation_space.n, env.action_space.n))
+        super().__init__(env, episodes)
         self.learning_rate = 0.03
         self.discount = 0.95
-        self.exploration_delta = 1.0 / episodes
-        self.action_space = env.action_space
         self.reset()
 
     def reset(self) -> None:
-        self.exploration_rate = 1.0
+        super().reset()
+        self.q_table = np.zeros(
+            (self.observation_space.n, self.action_space.n)
+        )
 
-    def get_action(self, observation: int) -> int:
-        if np.random.random() > self.exploration_rate:
-            return self.__get_greedy_action(observation)
-        else:
-            return self.action_space.sample()
-
-    def __get_greedy_action(self, observation: int) -> int:
+    def _get_greedy_action(self, observation: int) -> int:
         return np.random.choice(np.flatnonzero(
             self.q_table[observation] == self.q_table[observation].max()
         ))
@@ -42,7 +38,3 @@ class QTableAgent():
         table[observation][action] *= (1 - self.learning_rate)
         table[observation][action] += self.learning_rate\
             * (reward + self.discount * future_reward)
-
-    def next_episode(self) -> None:
-        if self.exploration_rate > 0.0:
-            self.exploration_rate -= self.exploration_delta

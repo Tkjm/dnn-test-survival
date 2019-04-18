@@ -1,21 +1,24 @@
 from environment import Environment
+from q_agent import QAgent
 import numpy as np
 import tensorflow as tf
 import pdb
 from tensorflow.keras import layers
 
 
-class DeepQAgent():
+class DeepQAgent(QAgent):
     def __init__(self, env: Environment, episodes: int) -> None:
-        self.q_table = np.zeros((env.observation_space.n, env.action_space.n))
+        super().__init__(env, episodes)
         self.discount = 0.95
-        self.exploration_delta = 1.0 / episodes
-        self.observation_space = env.observation_space
-        self.action_space = env.action_space
+        self.reset()
+
+    def reset(self) -> None:
+        super().reset()
+        tf.keras.backend.clear_session()
         self.model = tf.keras.models.Sequential([
             layers.Dense(
-                env.action_space.n,
-                input_shape=(env.observation_space.n,),
+                self.action_space.n,
+                input_shape=(self.observation_space.n,),
                 kernel_initializer='zeros',
                 use_bias=False
             ),
@@ -24,16 +27,6 @@ class DeepQAgent():
             optimizer=tf.train.GradientDescentOptimizer(0.1),
             loss='mean_squared_error',
         )
-        self.reset()
-
-    def reset(self) -> None:
-        self.exploration_rate = 1.0
-
-    def get_action(self, observation: int) -> int:
-        if np.random.random() > self.exploration_rate:
-            return self.__get_greedy_action(observation)
-        else:
-            return self.action_space.sample()
 
     def __get_q_value(self, observation: int) -> np.ndarray:
         return self.model.predict(
@@ -41,7 +34,7 @@ class DeepQAgent():
             batch_size=1,
         )[0]
 
-    def __get_greedy_action(self, observation: int) -> int:
+    def _get_greedy_action(self, observation: int) -> int:
         qualities = self.__get_q_value(observation)
         return np.random.choice(np.flatnonzero(
             qualities == qualities.max()
@@ -64,7 +57,3 @@ class DeepQAgent():
             batch_size=1,
             verbose=0,
         )
-
-    def next_episode(self) -> None:
-        if self.exploration_rate > 0.0:
-            self.exploration_rate -= self.exploration_delta
