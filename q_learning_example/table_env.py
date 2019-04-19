@@ -1,10 +1,13 @@
+import gym
 from gym.spaces import Discrete
 import numpy as np
 import pdb
 from typing import Tuple
 
 
-class Environment():
+class TableEnv(gym.Env):
+    metadata = {'render.modes': ['human', 'rgb_array']}
+
     def __init__(self) -> None:
         self.width = 3
         self.height = 3
@@ -15,27 +18,6 @@ class Environment():
         self.reset()
 
     def step(self, action: int) -> Tuple[int, float, bool]:
-        """
-        Parameters
-        ----------
-        action :
-
-        Returns
-        -------
-        ob, reward, episode_over
-            ob (object) :
-                an environment-specific object representing your observation of
-                the environment.
-            reward (float) :
-                amount of reward achieved by the previous action. The scale
-                varies between environments, but the goal is always to increase
-                your total reward.
-            episode_over (bool) :
-                whether it's time to reset the environment again. Most (but not
-                all) tasks are divided up into well-defined episodes, and done
-                being True indicates the episode has terminated. (For example,
-                perhaps the pole tipped too far, or you lost your last life.)
-        """
         if action == 0 and self.agent_pos[0] > 0:
             self.agent_pos[0] -= 1
         elif action == 1 and self.agent_pos[1] < self.width - 1:
@@ -56,6 +38,17 @@ class Environment():
         self.episode_over = False
         self.step_count = 0
         return self.__get_observation()
+
+    def render(self, mode='human'):
+        if mode == 'rgb_array':
+            # return RGB frame suitable for video
+            raise NotImplementedError
+        elif mode == 'human':
+            # pop up a window and render
+            raise NotImplementedError
+        else:
+            # just raise an exception
+            super().render(mode=mode)
 
     def __get_observation(self) -> int:
         return self.agent_pos[0] * self.width + self.agent_pos[1]

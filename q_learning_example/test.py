@@ -1,4 +1,4 @@
-from environment import Environment
+from table_env import TableEnv
 from deep_q_agent import DeepQAgent
 # from q_table_agent import QTableAgent
 import pdb
@@ -7,7 +7,7 @@ import numpy as np
 
 episode_count = 200
 maximum_steps = 600
-env = Environment()
+env = TableEnv()
 agent = DeepQAgent(env, episodes=episode_count)
 # agent = QTableAgent(env, episodes=episode_count)
 

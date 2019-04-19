@@ -1,4 +1,4 @@
-from environment import Environment
+from table_env import TableEnv
 from q_agent import QAgent
 import numpy as np
 import tensorflow as tf
@@ -7,7 +7,7 @@ from tensorflow.keras import layers
 
 
 class DeepQAgent(QAgent):
-    def __init__(self, env: Environment, episodes: int) -> None:
+    def __init__(self, env: TableEnv, episodes: int) -> None:
         super().__init__(env, episodes)
         self.discount = 0.95
         self.reset()

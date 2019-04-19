@@ -1,10 +1,10 @@
-from environment import Environment
+from table_env import TableEnv
 from q_agent import QAgent
 import numpy as np
 
 
 class QTableAgent(QAgent):
-    def __init__(self, env: Environment, episodes: int) -> None:
+    def __init__(self, env: TableEnv, episodes: int) -> None:
         super().__init__(env, episodes)
         self.learning_rate = 0.03
         self.discount = 0.95

@@ -1,9 +1,9 @@
-from environment import Environment
+import gym
 import numpy as np
 
 
 class QAgent():
-    def __init__(self, env: Environment, episodes: int) -> None:
+    def __init__(self, env: gym.Env, episodes: int) -> None:
         self.observation_space = env.observation_space
         self.action_space = env.action_space
         self.exploration_delta = 1.0 / episodes
