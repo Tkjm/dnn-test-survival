@@ -4,9 +4,11 @@ import numpy as np
 import tensorflow as tf
 import pdb
 from tensorflow.keras import layers
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 
-class DeepQAgent(QAgent):
+class NNQAgent(QAgent):
     def __init__(self, env: TableEnv, episodes: int) -> None:
         super().__init__(env, episodes)
         self.discount = 0.95
