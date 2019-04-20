@@ -4,8 +4,6 @@ import numpy as np
 import tensorflow as tf
 import pdb
 from tensorflow.keras import layers
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 
 class NNQAgent(QAgent):

@@ -3,7 +3,11 @@ from nn_q_agent import NNQAgent
 # from q_table_agent import QTableAgent
 import pdb
 import numpy as np
+import os
 
+USE_CPU = True
+if (USE_CPU):
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 episode_count = 200
 maximum_steps = 600
