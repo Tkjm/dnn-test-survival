@@ -7,6 +7,7 @@ class QAgent():
         self.observation_space = env.observation_space
         self.action_space = env.action_space
         self.exploration_delta = 1.0 / episodes
+        self.discount = 0.95
 
     def get_action(self, observation: int) -> int:
         if np.random.random() > self.exploration_rate:

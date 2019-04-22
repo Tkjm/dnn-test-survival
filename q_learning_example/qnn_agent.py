@@ -1,31 +1,29 @@
 from table_env import TableEnv
 from q_agent import QAgent
 import numpy as np
-import tensorflow as tf
 import pdb
-from tensorflow.keras import layers
+from tensorflow import keras
 
 
-class NNQAgent(QAgent):
+class QNNAgent(QAgent):
     def __init__(self, env: TableEnv, episodes: int) -> None:
         super().__init__(env, episodes)
-        self.discount = 0.95
         self.reset()
 
     def reset(self) -> None:
         super().reset()
-        tf.keras.backend.clear_session()
-        self.model = tf.keras.models.Sequential([
-            layers.Dense(
+        keras.backend.clear_session()
+        self.model = keras.models.Sequential([
+            keras.layers.Dense(
                 self.action_space.n,
                 input_shape=(self.observation_space.n,),
-                kernel_initializer='zeros',
+                kernel_initializer=keras.initializers.Zeros(),
                 use_bias=False
             ),
         ])
         self.model.compile(
-            optimizer=tf.train.GradientDescentOptimizer(0.1),
-            loss='mean_squared_error',
+            optimizer=keras.optimizers.SGD(lr=0.1),
+            loss=keras.losses.mean_squared_error,
         )
 
     def __get_q_value(self, observation: int) -> np.ndarray:

@@ -1,5 +1,5 @@
 from table_env import TableEnv
-from nn_q_agent import NNQAgent
+from qnn_agent import QNNAgent
 # from q_table_agent import QTableAgent
 import pdb
 import numpy as np
@@ -12,7 +12,7 @@ if (USE_CPU):
 episode_count = 200
 maximum_steps = 600
 env = TableEnv()
-agent = NNQAgent(env, episodes=episode_count)
+agent = QNNAgent(env, episodes=episode_count)
 # agent = QTableAgent(env, episodes=episode_count)
 
 np.set_printoptions(precision=6, suppress=True)

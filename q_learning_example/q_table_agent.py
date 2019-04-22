@@ -6,8 +6,6 @@ import numpy as np
 class QTableAgent(QAgent):
     def __init__(self, env: TableEnv, episodes: int) -> None:
         super().__init__(env, episodes)
-        self.learning_rate = 0.03
-        self.discount = 0.95
         self.reset()
 
     def reset(self) -> None:
@@ -35,6 +33,7 @@ class QTableAgent(QAgent):
             reward,
             table[new_ob]),
         )
-        table[observation][action] *= (1 - self.learning_rate)
-        table[observation][action] += self.learning_rate\
+        learning_rate = 0.03
+        table[observation][action] *= (1 - learning_rate)
+        table[observation][action] += learning_rate\
             * (reward + self.discount * future_reward)
