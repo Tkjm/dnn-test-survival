@@ -28,11 +28,6 @@ class QTableAgent(QAgent):
     ) -> None:
         table = self.q_table
         future_reward = table[new_ob].max()
-        print('{:>4} {:>4} {}'.format(
-            observation,
-            reward,
-            table[new_ob]),
-        )
         learning_rate = 0.03
         table[observation][action] *= (1 - learning_rate)
         table[observation][action] += learning_rate\

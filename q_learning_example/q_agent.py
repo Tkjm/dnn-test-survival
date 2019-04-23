@@ -9,13 +9,13 @@ class QAgent():
         self.exploration_delta = 1.0 / episodes
         self.discount = 0.95
 
-    def get_action(self, observation: int) -> int:
+    def get_action(self, observation) -> int:
         if np.random.random() > self.exploration_rate:
             return self._get_greedy_action(observation)
         else:
             return self.action_space.sample()
 
-    def _get_greedy_action(self, observation: int) -> int:
+    def _get_greedy_action(self, observation) -> int:
         raise NotImplementedError
 
     def reset(self) -> None:

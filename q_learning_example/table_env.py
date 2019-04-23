@@ -28,7 +28,7 @@ class TableEnv(gym.Env):
             self.agent_pos[1] -= 1
         reward = 0.0
         if np.array_equal(self.agent_pos, self.reward_pos):
-            reward = 1
+            reward = 1.0
             self.episode_over = True
         self.step_count += 1
         return self.__get_observation(), reward, self.episode_over

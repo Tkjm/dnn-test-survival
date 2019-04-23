@@ -34,9 +34,7 @@ class QNNAgent(QAgent):
 
     def _get_greedy_action(self, observation: int) -> int:
         qualities = self.__get_q_value(observation)
-        return np.random.choice(np.flatnonzero(
-            qualities == qualities.max()
-        ))
+        return np.random.choice(np.flatnonzero(qualities == qualities.max()))
 
     def update(
             self,
@@ -47,7 +45,6 @@ class QNNAgent(QAgent):
     ) -> None:
         new_q_value = self.__get_q_value(new_ob)
         desired_q_value = self.__get_q_value(observation)
-        print('{:>4} {:>4} {}'.format(observation, reward, desired_q_value))
         desired_q_value[action] = reward + self.discount * new_q_value.max()
         self.model.fit(
             x=np.eye(self.observation_space.n)[[observation]],
