@@ -6,7 +6,7 @@ from typing import Tuple
 
 
 class TableEnv(gym.Env):
-    metadata = {'render.modes': ['human', 'rgb_array']}
+    metadata = {'render.modes': ['rgb_array']}
 
     def __init__(self) -> None:
         self.width = 3
@@ -39,12 +39,9 @@ class TableEnv(gym.Env):
         self.step_count = 0
         return self.__get_observation()
 
-    def render(self, mode='human'):
+    def render(self, mode='rgb_array'):
         if mode == 'rgb_array':
             # return RGB frame suitable for video
-            raise NotImplementedError
-        elif mode == 'human':
-            # pop up a window and render
             raise NotImplementedError
         else:
             # just raise an exception

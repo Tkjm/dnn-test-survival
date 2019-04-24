@@ -20,5 +20,5 @@ def output(text: str) -> None:
     QApplication.processEvents()
 
 
-test.train(output)
+test.train(output, use_cpu=True)
 sys.exit(app.exec_())

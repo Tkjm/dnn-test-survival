@@ -32,11 +32,10 @@ def train_episode(env, agent, maximum_steps: int,
     return not True, maximum_steps
 
 
-def train(outputFunc: Callable = print):
-    USE_CPU = True
+def train(outputFunc: Callable = print, use_cpu: bool = False):
     USE_NN = True
 
-    if (USE_CPU):
+    if (use_cpu):
         os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
     env = TableEnv()
