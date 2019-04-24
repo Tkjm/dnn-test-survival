@@ -14,7 +14,7 @@ def train_episode(env, agent, maximum_steps: int,
     for step in range(maximum_steps):
         action = agent.get_action(observation)
         new_ob, reward, done = env.step(action)
-        outputFunc('{:>2}; {:>2} -> {:>2}; r = {:>3}'.format(
+        outputFunc('{:>2}; {} -> {}; r = {:>3}'.format(
             action,
             observation,
             new_ob,

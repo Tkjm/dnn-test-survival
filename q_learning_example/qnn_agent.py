@@ -34,7 +34,10 @@ class QNNAgent(QAgent):
 
     def _get_greedy_action(self, observation: int) -> int:
         qualities = self.__get_q_value(observation)
-        return np.random.choice(np.flatnonzero(qualities == qualities.max()))
+        max = qualities.max()
+        if np.isnan(max):
+            return self.action_space.sample()
+        return np.random.choice(np.flatnonzero(qualities == max))
 
     def update(
             self,

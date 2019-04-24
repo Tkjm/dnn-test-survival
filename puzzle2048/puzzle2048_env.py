@@ -1,5 +1,5 @@
 import gym
-from gym.spaces import Discrete
+from gym.spaces import Discrete, Box
 import numpy as np
 from typing import Tuple
 
@@ -10,13 +10,14 @@ class Puzzle2048_env(gym.Env):
     def __init__(self) -> None:
         self.width = 4
         self.height = 4
-        self.map = np.ndarray(shape=(self.height, self.width))
+        self.map = np.zeros(shape=(self.height, self.width))
         self.reward_pos = np.array([self.height - 1, self.width - 1])
+        self.map[tuple(self.reward_pos)] = 1.0
         self.action_space = Discrete(4)
-        self.observation_space = Discrete(self.height * self.width)
+        self.observation_space = Box(0.0, 1.0, (self.height, self.width))
         self.reset()
 
-    def step(self, action: int) -> Tuple[int, float, bool]:
+    def step(self, action: int) -> Tuple[np.ndarray, float, bool]:
         if action == 0 and self.agent_pos[0] > 0:
             self.agent_pos[0] -= 1
         elif action == 1 and self.agent_pos[1] < self.width - 1:
@@ -32,7 +33,7 @@ class Puzzle2048_env(gym.Env):
         self.step_count += 1
         return self.__get_observation(), reward, self.episode_over
 
-    def reset(self) -> int:
+    def reset(self) -> np.ndarray:
         self.agent_pos = np.array([0, 0])
         self.episode_over = False
         self.step_count = 0
@@ -46,5 +47,7 @@ class Puzzle2048_env(gym.Env):
             # just raise an exception
             super().render(mode=mode)
 
-    def __get_observation(self) -> int:
-        return self.agent_pos[0] * self.width + self.agent_pos[1]
+    def __get_observation(self) -> np.ndarray:
+        observation = np.copy(self.map)
+        observation[tuple(self.agent_pos)] = -1.0
+        return observation

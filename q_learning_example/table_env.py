@@ -10,7 +10,6 @@ class TableEnv(gym.Env):
     def __init__(self) -> None:
         self.width = 3
         self.height = 3
-        self.map = np.ndarray(shape=(self.height, self.width))
         self.reward_pos = np.array([self.height - 1, self.width - 1])
         self.action_space = Discrete(4)
         self.observation_space = Discrete(self.height * self.width)

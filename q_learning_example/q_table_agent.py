@@ -16,8 +16,11 @@ class QTableAgent(QAgent):
         )
 
     def _get_greedy_action(self, observation: int) -> int:
+        max = self.q_table[observation].max()
+        if np.isnan(max):
+            return self.action_space.sample()
         return np.random.choice(np.flatnonzero(
-            self.q_table[observation] == self.q_table[observation].max()
+            self.q_table[observation] == max
         ))
 
     def update(
