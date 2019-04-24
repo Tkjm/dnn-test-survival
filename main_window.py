@@ -1,4 +1,4 @@
-import q_learning_example.test as test
+import q_learning_example.train as train
 
 import sys
 from PyQt5.QtWidgets import QApplication
@@ -20,5 +20,5 @@ def output(text: str) -> None:
     QApplication.processEvents()
 
 
-test.train(output, use_cpu=True)
+train.train(output, use_cpu=True)
 sys.exit(app.exec_())
