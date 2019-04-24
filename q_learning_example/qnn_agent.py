@@ -1,5 +1,6 @@
-from table_env import TableEnv
-from q_agent import QAgent
+from .table_env import TableEnv
+from .q_agent import QAgent
+
 import numpy as np
 import pdb
 from tensorflow import keras

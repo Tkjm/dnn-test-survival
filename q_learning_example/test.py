@@ -1,13 +1,15 @@
-from table_env import TableEnv
-from qnn_agent import QNNAgent
-from q_table_agent import QTableAgent
+from .table_env import TableEnv
+from .qnn_agent import QNNAgent
+from .q_table_agent import QTableAgent
+
 import pdb
 import numpy as np
 import os
-from typing import Tuple
+from typing import Tuple, Callable
 
 
-def train_episode(env, agent, maximum_steps: int) -> Tuple[bool, int]:
+def train_episode(env, agent, maximum_steps: int,
+                  outputFunc: Callable) -> Tuple[bool, int]:
     '''
     Train an episode and return:
         timed_out (bool): whether the training hasn't end before maximum_steps
@@ -17,7 +19,7 @@ def train_episode(env, agent, maximum_steps: int) -> Tuple[bool, int]:
     for step in range(maximum_steps):
         action = agent.get_action(observation)
         new_ob, reward, done = env.step(action)
-        print('{:>2}; {:>2} -> {:>2}; r = {:>3}'.format(
+        outputFunc('{:>2}; {:>2} -> {:>2}; r = {:>3}'.format(
             action,
             observation,
             new_ob,
@@ -30,28 +32,30 @@ def train_episode(env, agent, maximum_steps: int) -> Tuple[bool, int]:
     return not True, maximum_steps
 
 
-USE_CPU = True
-USE_NN = True
+def train(outputFunc: Callable = print):
+    USE_CPU = True
+    USE_NN = True
 
-if (USE_CPU):
-    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+    if (USE_CPU):
+        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-env = TableEnv()
-episode_count = 200
-maximum_steps = 600
+    env = TableEnv()
+    episode_count = 200
+    maximum_steps = 600
 
-if USE_NN:
-    agent = QNNAgent(env, episodes=episode_count)
-else:
-    agent = QTableAgent(env, episodes=episode_count)
+    if USE_NN:
+        agent = QNNAgent(env, episodes=episode_count)
+    else:
+        agent = QTableAgent(env, episodes=episode_count)
 
-np.set_printoptions(precision=6, suppress=True)
-for episode in range(episode_count):
-    timed_out, step_count = train_episode(env, agent, maximum_steps)
-    print("Episode {} {} after step {}.".format(
-        episode,
-        "timed out" if timed_out else "end",
-        step_count,
-    ))
-    agent.next_episode()
-np.set_printoptions()
+    np.set_printoptions(precision=6, suppress=True)
+    for episode in range(episode_count):
+        timed_out, step_count = train_episode(
+            env, agent, maximum_steps, outputFunc)
+        outputFunc("Episode {} {} after step {}.".format(
+            episode,
+            "timed out" if timed_out else "end",
+            step_count,
+        ))
+        agent.next_episode()
+    np.set_printoptions()
