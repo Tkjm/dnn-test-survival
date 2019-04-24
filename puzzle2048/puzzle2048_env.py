@@ -2,7 +2,7 @@ import gym
 from gym.spaces import Discrete, Box
 import numpy as np
 from typing import Tuple
-from pdb import set_trace
+# from pdb import set_trace
 
 
 class Puzzle2048_env(gym.Env):
@@ -18,30 +18,35 @@ class Puzzle2048_env(gym.Env):
     def step(self, action: int) -> Tuple[np.ndarray, float, bool]:
         temp_map = np.rot90(self.map, action)
         reward = 0.0
+        effective = False
         for col in range(self.width):
             row_merge = 0
             for row in range(1, self.height):
                 if temp_map[row, col] == 0.0:
                     continue
                 if temp_map[row, col] == temp_map[row_merge, col]:
+                    effective = True
                     temp_map[row_merge, col] += 1.0
-                    if temp_map[row_merge, col] == 8:
+                    if temp_map[row_merge, col] == 9.0:
                         self.episode_over = True
                     temp_map[row, col] = 0.0
                     reward += temp_map[row_merge, col]
                 else:
                     if temp_map[row_merge, col] != 0.0:
                         row_merge += 1
+                    if row_merge != row:
+                        effective = True
                     temp_map[row_merge, col], temp_map[row, col] =\
                         temp_map[row, col], temp_map[row_merge, col]
         self.map = np.rot90(temp_map, 4 - action)
         self.step_count += 1
-        self.add_tile()
-        zero_indices = np.argwhere(self.map == 0)
-        if zero_indices.size == 0\
-            and 0.0 not in np.diff(self.map)\
-                and 0.0 not in np.diff(self.map.T):
-            self.episode_over = True
+        if effective:
+            self.add_tile()
+            zero_indices = np.argwhere(self.map == 0)
+            if zero_indices.size == 0\
+                and 0.0 not in np.diff(self.map)\
+                    and 0.0 not in np.diff(self.map.T):
+                self.episode_over = True
         return self.__get_observation(), reward, self.episode_over
 
     def reset(self) -> np.ndarray:
