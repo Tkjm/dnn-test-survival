@@ -18,6 +18,11 @@ class QNNAgent(QAgent):
         self.model = keras.models.Sequential([
             keras.layers.Flatten(input_shape=self.observation_space.shape),
             keras.layers.Dense(
+                8,
+                kernel_initializer=keras.initializers.Zeros(),
+            ),
+            keras.layers.LeakyReLU(alpha=0.2),
+            keras.layers.Dense(
                 self.action_space.n,
                 kernel_initializer=keras.initializers.Zeros(),
             ),

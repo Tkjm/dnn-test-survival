@@ -32,12 +32,15 @@ class TrainingWorker(QObject):
         for step in range(self.maximum_steps):
             action = self.agent.get_action(observation)
             new_ob, reward, done = self.env.step(action)
-            self.output_ready.emit("Steps", '{:>2}\n{} ->\n{}; r = {:>5}'.format(
-                action,
-                observation,
-                new_ob,
-                reward,
-            ))
+            self.output_ready.emit(
+                "Steps",
+                '{:>2}\n{} ->\n{}; r = {:>5}'.format(
+                    action,
+                    observation,
+                    new_ob,
+                    reward,
+                )
+            )
             total_reward += reward
             self.agent.update(observation, new_ob, action, reward)
             observation = new_ob
