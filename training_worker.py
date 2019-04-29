@@ -5,7 +5,7 @@ from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 
 class TrainingWorker(QObject):
     done = pyqtSignal()
-    output_ready = pyqtSignal(str)
+    output_ready = pyqtSignal(str, str)
 
     def __init__(self, env, agent, episode_count: int,
                  maximum_steps: int) -> None:
@@ -32,7 +32,7 @@ class TrainingWorker(QObject):
         for step in range(self.maximum_steps):
             action = self.agent.get_action(observation)
             new_ob, reward, done = self.env.step(action)
-            self.output_ready.emit('{:>2}\n{} ->\n{}; r = {:>5}'.format(
+            self.output_ready.emit("Steps", '{:>2}\n{} ->\n{}; r = {:>5}'.format(
                 action,
                 observation,
                 new_ob,
@@ -52,12 +52,16 @@ class TrainingWorker(QObject):
             if not self.running:
                 break
             timed_out, step_count, total_reward = self._train_episode()
-            self.output_ready.emit("Episode {} {} after step {}.".format(
-                episode + 1,
-                "timed out" if timed_out else "end",
-                step_count,
-            ))
             self.output_ready.emit(
+                "Episodes",
+                "Episode {} {} after step {}.".format(
+                    episode + 1,
+                    "timed out" if timed_out else "end",
+                    step_count,
+                )
+            )
+            self.output_ready.emit(
+                "Episodes",
                 "Total Reward: {:>5}; Average Reward: {:>5.2f}"
                 .format(total_reward, total_reward / step_count)
             )
