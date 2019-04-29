@@ -20,7 +20,6 @@ class QNNAgent(QAgent):
             keras.layers.Dense(
                 self.action_space.n,
                 kernel_initializer=keras.initializers.Zeros(),
-                use_bias=False
             ),
         ])
         self.model.compile(
