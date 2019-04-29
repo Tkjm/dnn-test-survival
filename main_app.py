@@ -7,7 +7,9 @@ from PyQt5.QtCore import QThread, QObject
 
 class MainApp():
     def __init__(self, worker: QObject) -> None:
-        self.app = QApplication(sys.argv)
+        self.app = QApplication.instance()
+        if not self.app:
+            self.app = QApplication()
         self.main_window = MainWindow()
         self.worker = worker
 
