@@ -3,6 +3,7 @@ from .q_agent import QAgent
 
 import numpy as np
 from tensorflow import keras
+import tensorflow as tf
 # from pdb import set_trace
 
 
@@ -26,12 +27,14 @@ class QNNAgent(QAgent):
             optimizer=keras.optimizers.SGD(lr=0.1),
             loss=keras.losses.mean_squared_error,
         )
+        self.graph = tf.get_default_graph()
 
     def __get_q_value(self, observation: np.ndarray) -> np.ndarray:
-        return self.model.predict(
-            observation[np.newaxis, :],
-            batch_size=1,
-        )[0]
+        with self.graph.as_default():
+            return self.model.predict(
+                observation[np.newaxis, :],
+                batch_size=1,
+            )[0]
 
     def _get_greedy_action(self, observation: np.ndarray) -> int:
         qualities = self.__get_q_value(observation)
@@ -50,9 +53,10 @@ class QNNAgent(QAgent):
         new_q_value = self.__get_q_value(new_ob)
         desired_q_value = self.__get_q_value(observation)
         desired_q_value[action] = reward + self.discount * new_q_value.max()
-        self.model.fit(
-            x=observation[np.newaxis, :],
-            y=desired_q_value[np.newaxis],
-            batch_size=1,
-            verbose=0,
-        )
+        with self.graph.as_default():
+            self.model.fit(
+                x=observation[np.newaxis, :],
+                y=desired_q_value[np.newaxis],
+                batch_size=1,
+                verbose=0,
+            )
