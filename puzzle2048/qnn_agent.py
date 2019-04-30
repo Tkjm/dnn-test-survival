@@ -16,19 +16,31 @@ class QNNAgent(QAgent):
         super().reset()
         keras.backend.clear_session()
         self.model = keras.models.Sequential([
-            keras.layers.Flatten(input_shape=self.observation_space.shape),
+            keras.layers.Reshape(
+                (*self.observation_space.shape, 1),
+                input_shape=self.observation_space.shape,
+            ),
+            keras.layers.Conv2D(
+                4,
+                kernel_size=3,
+                padding='same',
+            ),
+            keras.layers.LeakyReLU(alpha=0.2),
+            keras.layers.Flatten(),
             keras.layers.Dense(
-                8,
-                kernel_initializer=keras.initializers.Zeros(),
+                9,
+            ),
+            keras.layers.LeakyReLU(alpha=0.2),
+            keras.layers.Dense(
+                7,
             ),
             keras.layers.LeakyReLU(alpha=0.2),
             keras.layers.Dense(
                 self.action_space.n,
-                kernel_initializer=keras.initializers.Zeros(),
             ),
         ])
         self.model.compile(
-            optimizer=keras.optimizers.SGD(lr=0.1),
+            optimizer=keras.optimizers.SGD(lr=0.05, momentum=0.6),
             loss=keras.losses.mean_squared_error,
         )
         self.graph = tf.get_default_graph()
