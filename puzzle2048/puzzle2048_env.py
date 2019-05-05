@@ -36,8 +36,8 @@ class Puzzle2048_env(gym.Env):
                         row_merge += 1
                     if row_merge != row:
                         effective = True
-                    temp_map[row_merge, col], temp_map[row, col] =\
-                        temp_map[row, col], temp_map[row_merge, col]
+                        temp_map[row_merge, col], temp_map[row, col] =\
+                            temp_map[row, col], temp_map[row_merge, col]
         self.map = np.rot90(temp_map, 4 - action)
         self.step_count += 1
         if effective:
