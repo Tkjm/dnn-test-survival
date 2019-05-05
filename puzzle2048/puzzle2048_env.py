@@ -13,7 +13,6 @@ class Puzzle2048_env(gym.Env):
         self.height = 4
         self.action_space = Discrete(4)
         self.observation_space = Box(0.0, 1.0, (self.height, self.width))
-        self.reset()
 
     def step(self, action: int) -> Tuple[np.ndarray, float, bool]:
         temp_map = np.rot90(self.map, action)
