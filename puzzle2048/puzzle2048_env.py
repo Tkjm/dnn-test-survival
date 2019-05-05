@@ -26,11 +26,11 @@ class Puzzle2048_env(gym.Env):
                     continue
                 if temp_map[row, col] == temp_map[row_merge, col]:
                     effective = True
+                    reward += temp_map[row_merge, col]
                     temp_map[row_merge, col] += 1.0
                     if temp_map[row_merge, col] == 9.0:
                         self.episode_over = True
                     temp_map[row, col] = 0.0
-                    reward += temp_map[row_merge, col]
                 else:
                     if temp_map[row_merge, col] != 0.0:
                         row_merge += 1
