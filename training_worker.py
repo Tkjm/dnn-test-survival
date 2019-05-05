@@ -16,9 +16,6 @@ class TrainingWorker(QObject):
         self.maximum_steps = maximum_steps
         self.running = True
 
-    def __del__(self) -> None:
-        self.wait()
-
     def _train_episode(self) -> Tuple[bool, int]:
         '''
         Train an episode and return:
